@@ -139,7 +139,6 @@ elif BottomHall==0: #Door is locked
                 GPIO.output(37,False)
                 TopHall=GPIO.input(33)
                 runTime=time.process_time()-TimeStart
-                print('Something went wrong, go check the door!')
         if default_max_runtime<=runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop open FAILED!"
