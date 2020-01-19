@@ -33,6 +33,7 @@ def Safe_Kill():
 
 def PushOver(message):
 
+	print("SENDING MESSAGE VIA TWILIO")
 	client = Client(twilio_sid, twilio_auth_token)
 
 	message = client.messages \
@@ -42,7 +43,7 @@ def PushOver(message):
 	                     to=twilio_to_number
 	                 )
 
-	print(message.sid)
+	print("SENT MESSAGE VIA TWILIO - " + message.sid)
 
 #Argument controller
 if len(sys.argv)>3: #Tests if you've entered too many arguments
