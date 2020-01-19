@@ -83,7 +83,7 @@ if len(sys.argv)==1:
  
 #Start door!
 #def DoorControl():
-TimeStart=time.clock()
+TimeStart=time.process_time()
 runTime=0
 #Check door status from Magnets
 BottomHall=GPIO.input(31)
@@ -99,7 +99,7 @@ if Door_Action=='open': #Door is locked
                 GPIO.output(35,True)
                 GPIO.output(37,False)
                 TopHall=GPIO.input(33)
-                runTime=time.clock()-TimeStart
+                runTime=time.process_time()-TimeStart
         if 45==runTime:
                 print('Something went wrong, go check the door!')
                 message = 'Coop open FAILED!'
@@ -117,7 +117,7 @@ elif Door_Action=='close': #Door is open
                 GPIO.output(35,False)
                 GPIO.output(37,True)
                 BottomHall=GPIO.input(31)
-                runTime=time.clock()-TimeStart
+                runTime=time.process_time()-TimeStart
         if 45==runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop close FAILED!"
@@ -136,7 +136,7 @@ elif BottomHall==0: #Door is locked
                 GPIO.output(35,True)
                 GPIO.output(37,False)
                 TopHall=GPIO.input(33)
-                runTime=time.clock()-TimeStart
+                runTime=time.process_time()-TimeStart
         if 45==runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop open FAILED!"
@@ -154,7 +154,7 @@ elif TopHall==0: #Door is open
                 GPIO.output(35,False)
                 GPIO.output(37,True)
                 BottomHall=GPIO.input(31)
-                runTime=time.clock()-TimeStart
+                runTime=time.process_time()-TimeStart
         if 45==runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop close FAILED!"
@@ -165,6 +165,6 @@ elif TopHall==0: #Door is open
                 message = "Coop closed successfully!"
                 PushOver(message)
                 Safe_Kill()
-runTime=time.clock()-TimeStart
+runTime=time.process_time()-TimeStart
 print('Total Time: '+str(runTime))
 Safe_Kill()
