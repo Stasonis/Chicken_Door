@@ -5,10 +5,15 @@ import signal
 import sys
 #import httplib, urllib #for Push Notifications
 
+from twilio.rest import Client
+
+
 #config.txt included in .gitignore first line is the token, the second line is the key
 config = open('config.txt').readlines()
-pushover_token=config[0].rstrip()
-pushover_user=config[1]
+twilio_sid=config[0].rstrip()
+twilio_auth_token=config[1]
+twilio_from_number=config[2]
+twilio_to_number=config[3]
 
 
 #Setting up Board GPIO Pins
@@ -27,16 +32,17 @@ def Safe_Kill():
         sys.exit('Motors shutdown, GPIO cleaned')
 
 def PushOver(message):
-    conn = httplib.HTTPSConnection("api.pushover.net:443")
-    conn.request("POST", "/1/messages.json",
-      urllib.urlencode({
-      #I know, I know no keys in source control. Sheesh.
-          #The old keys no longer work
-        "token": pushover_token,
-        "user": pushover_user,
-        "message": message,
-      }), { "Content-type": "application/x-www-form-urlencoded" })
-    conn.getresponse()
+
+	client = Client(twilio_sid, twilio_auth_token)
+
+	message = client.messages \
+	                .create(
+	                     body=message,
+	                     from_=twilio_from_number,
+	                     to=twilio_to_number
+	                 )
+
+	print(message.sid)
 
 #Argument controller
 if len(sys.argv)>3: #Tests if you've entered too many arguments
