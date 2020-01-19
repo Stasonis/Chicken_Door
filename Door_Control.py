@@ -15,6 +15,8 @@ twilio_auth_token=config[1]
 twilio_from_number=config[2]
 twilio_to_number=config[3]
 
+default_max_runtime=15
+
 
 #Setting up Board GPIO Pins
 GPIO.setmode(GPIO.BOARD)
@@ -100,7 +102,7 @@ if Door_Action=='open': #Door is locked
                 GPIO.output(37,False)
                 TopHall=GPIO.input(33)
                 runTime=time.process_time()-TimeStart
-        if 45==runTime:
+        if default_max_runtime<=runTime:
                 print('Something went wrong, go check the door!')
                 message = 'Coop open FAILED!'
                 PushOver(message)
@@ -118,7 +120,7 @@ elif Door_Action=='close': #Door is open
                 GPIO.output(37,True)
                 BottomHall=GPIO.input(31)
                 runTime=time.process_time()-TimeStart
-        if 45==runTime:
+        if default_max_runtime<=runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop close FAILED!"
                 PushOver(message)
@@ -137,7 +139,8 @@ elif BottomHall==0: #Door is locked
                 GPIO.output(37,False)
                 TopHall=GPIO.input(33)
                 runTime=time.process_time()-TimeStart
-        if 45==runTime:
+                print('Something went wrong, go check the door!')
+        if default_max_runtime<=runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop open FAILED!"
                 PushOver(message)
@@ -155,7 +158,7 @@ elif TopHall==0: #Door is open
                 GPIO.output(37,True)
                 BottomHall=GPIO.input(31)
                 runTime=time.process_time()-TimeStart
-        if 45==runTime:
+        if default_max_runtime<=runTime:
                 print('Something went wrong, go check the door!')
                 message = "Coop close FAILED!"
                 PushOver(message)
