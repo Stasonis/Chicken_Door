@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import signal
 import sys
+from Door import Door
 #import httplib, urllib #for Push Notifications
 
 from twilio.rest import Client
@@ -24,6 +25,8 @@ GPIO.setup(35,GPIO.OUT)
 GPIO.setup(37,GPIO.OUT)
 GPIO.setup(33,GPIO.IN)#Locked
 GPIO.setup(31,GPIO.IN)#Open
+
+coopDoor = Door(default_max_runtime)
 
 #Clean kill of script function (Stops Motor, cleans GPIO)
 def Safe_Kill():
@@ -95,7 +98,7 @@ if TopHall==0:print('Door is open')
 if BottomHall==1:print('No magnet sensed on lock')
 if TopHall==1:print('No magnet sensed top')
 if Door_Action=='open': #Door is locked
-        print('The door is locked!')
+        """print('The door is locked!')
         print('The door is going up!')
         while TopHall==1 and runTime<Door_Time:
                 GPIO.output(35,True)
@@ -111,7 +114,17 @@ if Door_Action=='open': #Door is locked
                 print('Door is open!')
                 message = 'Coop opened successfully!'
                 PushOver(message)
-                Safe_Kill()
+                Safe_Kill()"""
+        if coopDoor.openDoor():
+        	print('Door is open!')
+            message = 'Coop opened successfully!'
+            PushOver(message)
+        else
+        	message = 'Coop open FAILED!'
+            PushOver(message)
+        
+        Safe_Kill()
+
 elif Door_Action=='close': #Door is open
         print('The door is open!')
         print('The door is going down!')
@@ -132,7 +145,7 @@ elif Door_Action=='close': #Door is open
                 PushOver(message)
                 Safe_Kill()
 elif BottomHall==0: #Door is locked
-        print('The door is locked!')
+        """print('The door is locked!')
         print('The door is going up!')
         while TopHall==1 and runTime<Door_Time:
                 GPIO.output(35,True)
@@ -148,7 +161,18 @@ elif BottomHall==0: #Door is locked
                 print('Door is open!')
                 message = "Coop opened successfully!"
                 PushOver(message)
-                Safe_Kill()
+                Safe_Kill()"""
+
+        if coopDoor.openDoor():
+        	print('Door is open!')
+            message = 'Coop opened successfully!'
+            PushOver(message)
+        else
+        	message = 'Coop open FAILED!'
+            PushOver(message)
+        
+        Safe_Kill()
+
 elif TopHall==0: #Door is open
         print('The door is open!')
         print('The door is going down!')
