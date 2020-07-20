@@ -1,0 +1,21 @@
+{
+  "doorSensors": {
+    "top": 33,
+    "bottom": 31
+  },
+
+  "motor": {
+    "up": 35,
+    "down": 37
+  },
+
+  "doorMaxRuntime": 10,
+
+  "twilio": {
+    "sid": "INSERT_TWILIO_SID_HERE",
+    "authToken": "INSERT_TWILIO_AUTH_TOKEN_HERE",
+    "fromNumber": "INSERT_TWILIO_FROM_NUMBER_HERE_INCLUDING_+_SIGN",
+    "toNumber": "INSERT_TWILIO_TO_NUMBER_HERE_INCLUDING_+_SIGN"
+  }
+
+}
