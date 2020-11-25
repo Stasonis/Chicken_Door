@@ -1,5 +1,5 @@
-from DoorSensor import DoorSensor
-from MotorControl import MotorControl
+from Chicken_Door.DoorControl.DoorSensor import DoorSensor
+from Chicken_Door.DoorControl.MotorControl import MotorControl
 import time
 
 class Door:
@@ -8,7 +8,7 @@ class Door:
 
     motorControl = None
 
-    maximumTime = 10
+    maximumTime = None
 
     def __init__(self, config):
         self.maximumTime = config["doorMaxRuntime"]
@@ -17,6 +17,14 @@ class Door:
         self.bottomSensor = DoorSensor(config["doorSensors"]["bottom"])
 
         self.motorControl = MotorControl(config)
+
+    def status(self):
+        return {"isOpen": self.isOpen(),
+                "isClosed": self.isClosed(),
+                "topSensor": self.topSensor.status(),
+                "bottomSensor": self.bottomSensor.status(),
+                "motorControl": self.motorControl.status(),
+                "maximumTime": self.maximumTime}
 
     def isOpen(self):
         return self.topSensor.isOn()
@@ -40,7 +48,7 @@ class Door:
                 self.motorControl.stop()
                 return -1
             print("Close Cycle")
-            time.sleep(1)
+            time.sleep(.5)
 
         self.motorControl.stop()
         print("Door closed")
@@ -62,8 +70,22 @@ class Door:
                 self.motorControl.stop()
                 return -1
             print("Open Cycle")
-            time.sleep(1)
+            time.sleep(.5)
 
         self.motorControl.stop()
         print("Door opened")
         return 1
+
+    def up(self, duration):
+        self.motorControl.up()
+        time.sleep(duration)
+        self.motorControl.stop()
+
+        return True
+
+    def down(self, duration):
+        self.motorControl.down()
+        time.sleep(duration)
+        self.motorControl.stop()
+
+        return True

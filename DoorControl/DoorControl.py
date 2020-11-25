@@ -1,7 +1,6 @@
-from Door import Door
+from Chicken_Door.DoorControl.Door import Door
 import RPi.GPIO as GPIO
 from twilio.rest import Client
-from picamera import PiCamera
 import time
 
 class DoorControl:
@@ -10,8 +9,6 @@ class DoorControl:
     twilioAuthToken = None
     twilioFromNumber = None
     twilioToNumber = None
-
-    camera = None
 
     def __init__(self, config):
         GPIO.setwarnings(False)
@@ -24,28 +21,37 @@ class DoorControl:
 
         self.door = Door(config)
 
-        self.camera = PiCamera()
+    def shutdown(self):
+        GPIO.cleanup()
+
+    def status(self):
+        return {"door": self.door.status()}
 
     def open(self):
         if self.door.open() == 1:
             self.statusNotification("Door Opened Successfully")
+            return True
         else:
             self.statusNotification("Door Failed to Open")
+            return False
 
     def close(self):
         if self.door.close() == 1:
             self.statusNotification("Door Closed Successfully")
+            return True
         else:
             self.statusNotification("Door Failed to Close")
+            return False
+
+    def up(self, duration):
+        return self.door.up(duration)
+
+    def down(self, duration):
+        return self.door.down(duration)
 
     def statusNotification(self, message):
         print("Sending message via Twilio - " + message)
         client = Client(self.twilioSid, self.twilioAuthToken)
-
-        self.camera.start_preview()
-        time.sleep(2)
-        self.camera.capture('/home/pi/Desktop/ChickenCoop/src/Final/Chicken_Door/NewDoor/image.jpg')
-        self.camera.stop_preview()
 
         message = client.messages \
                         .create(

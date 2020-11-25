@@ -10,11 +10,16 @@ class MotorControl:
         GPIO.setup(self.motorUpPin, GPIO.OUT)
         GPIO.setup(self.motorDownPin, GPIO.OUT)
 
+    def status(self):
+        return {"upPin": self.motorUpPin,
+                "downPin": self.motorDownPin}
+
     def up(self):
-        #GPIO.output(self.motorUp, True)
+        GPIO.output(self.motorDownPin, False)
         GPIO.output(self.motorUpPin, True)
 
     def down(self):
+        GPIO.output(self.motorUpPin, False)
         GPIO.output(self.motorDownPin, True)
 
     def stop(self):

@@ -12,10 +12,14 @@ class DoorSensor:
 
         self.gpioPin = gpioPin
 
+    def status(self):
+        return {"active": self.isOn(),
+                "gpioPin": self.gpioPin}
+
     def isOn(self):
-        if GPIO.input(self.gpioPin):     # if port 25 == 1
+        if GPIO.input(self.gpioPin):
             return False
-        else:                  # if port 25 != 1
+        else:
             return True
 
     def setCallback(self, callback):
